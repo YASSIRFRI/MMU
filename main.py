@@ -50,8 +50,8 @@ while True:
         virtual_address = int(command[2])
         if process_id in mmu.process_map:
             process = mmu.process_map[process_id]
-            if process.base <= virtual_address < process.limit:
-                print(f'Physical address: {virtual_address - process.base}')
+            if 0 < virtual_address <= process.limit - process.base :
+                print(f'Physical address: {virtual_address + process.base}')
             else:
                 print('Error: Address outside process address space')
         else:
