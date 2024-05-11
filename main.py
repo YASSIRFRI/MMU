@@ -23,7 +23,7 @@ else:
     print('Invalid management policy')
     sys.exit(1)
 buffer = Buffer(total_memory)
-mmu = MMU(buffer, management_policy)  # Replace ManagementPolicy() with your actual policy based on management_policy
+mmu = MMU(buffer, management_policy)  
 process_id_counter = 1
 
 while True:
@@ -41,9 +41,7 @@ while True:
     elif command[0] == 'dl':
         process_id = int(command[1])
         if process_id in mmu.process_map:
-            process = mmu.process_map[process_id]
-            mmu.buffer.size += process.size
-            del mmu.process_map[process_id]
+            mmu.delete(process_id)
             print(f'Process {process_id} deleted')
         else:
             print('Error: No such process')
@@ -59,6 +57,4 @@ while True:
         else:
             print('Error: No such process')
     elif command[0] == 'pm':
-        for process in mmu.process_map.values():
-            print(f'Process {process.id}: base {process.base}, limit {process.limit}')
-        print(f'Free memory: {mmu.buffer.size}')
+        mmu.buffer.flush()
