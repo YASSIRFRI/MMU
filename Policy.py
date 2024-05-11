@@ -27,23 +27,26 @@ class NextFit(Policy):
     def allocate(self, buffer, process):
         num_holes = len(buffer.holes)
         start_index = self.last_allocated_index
-
-        # Start searching from the last allocated index
+        print(start_index)
         for i in range(start_index, num_holes):
             start, end = buffer.holes[i]
             if end - start >= process.limit:
                 buffer.map[(start, start + process.limit)] = process.id
                 buffer.holes[i] = (start + process.limit, end)
-                self.last_allocated_index = i
+                if end - start > process.limit:
+                    self.last_allocated_index = i
+                else :
+                    self.last_allocated_index = (i+1)%num_holes
                 return True
-        
-        # If no suitable hole is found, wrap around and search from the beginning
         for i in range(num_holes):
             start, end = buffer.holes[i]
             if end - start >= process.limit:
                 buffer.map[(start, start + process.limit)] = process.id
                 buffer.holes[i] = (start + process.limit, end)
-                self.last_allocated_index = i
+                if end - start > process.limit:
+                    self.last_allocated_index = i
+                else :
+                    self.last_allocated_index = (i+1)%num_holes
                 return True
         
         return False
