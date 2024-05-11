@@ -43,7 +43,11 @@ class Buffer:
     def flush(self):
         memory_file=open("memory.txt","w")
         output_buffer = [" " for _ in range(self.size*32)]
-        print(self.map)
+        map2 = {}
+        for key, value in self.map.items():
+            newkey = (key[0], key[1]-key[0])
+            map2[newkey] = value
+        print(map2)
         for e in self.map:
             procees_name="@@@@@@Process "+str(self.map[e])+"@@@@"
             for i in range(32-len(procees_name)):

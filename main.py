@@ -34,7 +34,7 @@ while True:
         if mmu.management_policy.allocate(mmu.buffer, process):
             process.base, process.limit = mmu.buffer.get(process.id)
             mmu.add_process(process)
-            print(f'Process {process.id} created with base {process.base} and limit {process.limit}')
+            print(f'Process {process.id} created with base {process.base} and limit {size}')
             process_id_counter += 1
         else:
             print('Error: Not enough memory')
@@ -58,3 +58,6 @@ while True:
             print('Error: No such process')
     elif command[0] == 'pm':
         mmu.buffer.flush()
+    elif command[0] == 'exit':
+        print("Exiting the application...")
+        sys.exit(1)
