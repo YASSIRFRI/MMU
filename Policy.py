@@ -22,18 +22,32 @@ class FirstFit(Policy):
     
 class NextFit(Policy):
     def __init__(self):
-        self.last_allocation = 0
-        self.last_hole = 0
+        self.last_allocated_index = 0
+    
     def allocate(self, buffer, process):
-        for i, hole in enumerate(buffer.holes):
-            start, end = hole
-            if end - start >= process.limit and i >= self.last_hole:
-                buffer.map[(start, start+process.limit)] = process.id
-                buffer.holes[i] = (start+process.limit, end)
-                buffer.pointer = start+process.limit
-                last_hole = i
+        num_holes = len(buffer.holes)
+        start_index = self.last_allocated_index
+
+        # Start searching from the last allocated index
+        for i in range(start_index, num_holes):
+            start, end = buffer.holes[i]
+            if end - start >= process.limit:
+                buffer.map[(start, start + process.limit)] = process.id
+                buffer.holes[i] = (start + process.limit, end)
+                self.last_allocated_index = i
                 return True
+        
+        # If no suitable hole is found, wrap around and search from the beginning
+        for i in range(num_holes):
+            start, end = buffer.holes[i]
+            if end - start >= process.limit:
+                buffer.map[(start, start + process.limit)] = process.id
+                buffer.holes[i] = (start + process.limit, end)
+                self.last_allocated_index = i
+                return True
+        
         return False
+
 
 class BestFit(Policy):
     def __init__(self):

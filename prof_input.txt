@@ -1,0 +1,25 @@
+python main.py 10000 3
+
+cr 1000
+pm
+cr 500
+cr 1000
+pm
+dl 4
+dl 2
+pm
+cv 1 50
+cv 3 50
+cv 3 1200
+pm
+cr 200
+pm
+cr 500
+pm
+dl 3
+pm
+dl 4
+pm
+dl 1
+pm
+cv 5 50

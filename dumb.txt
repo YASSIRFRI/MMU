@@ -1,4 +1,5 @@
 our program should display a prompt for the user and should accept the following 4 commands:
+
 1. First
 cr AMOUNT_OF_REQUESTED_MEMORY
 Description:
@@ -7,6 +8,7 @@ The command should return the process ID and the Base and Limit of the allocated
 command may return an error message if there is not enough memory.
 e.g.
 > cr 1500
+
 2. Second
 > dl PROCESS_ID
 Description:
@@ -14,8 +16,7 @@ Delete the specified process and free the allocated memory.
 The command should return an error message if there is no process with the specified ID.
 e.g.
 > dl 6
-University Mohammed VI Polytechnic College of Computing
-2/2
+
 3. Third
 > cv PROCESS_ID VIRTUAL_ADDRESS
 Description:
@@ -25,6 +26,7 @@ The command should return an error message if the process tries to access an add
 address space.
 e.g.
 > cv 6 200
+
 4. Fourth
 > pm
 Description:
