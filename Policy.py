@@ -29,15 +29,23 @@ class NextFit(Policy):
             start, end = current_hole.start, current_hole.end
             if end - start >= process.limit:
                 buffer.map[(start, start + process.limit)] = process.id
-                if end - start > process.limit:
-                    current_hole.start = start + process.limit
-                else:
-                    current_hole = current_hole.next
+                current_hole.start = start + process.limit
+                buffer.compactHoles()
                 self.last_allocated_hole = current_hole
                 return True
             current_hole = current_hole.next
             if current_hole == start_hole:
                 break
+        start_hole = buffer.holes
+        while start_hole != current_hole:
+            start, end = start_hole.start, start_hole.end
+            if end - start >= process.limit:
+                buffer.map[(start, start + process.limit)] = process.id
+                start_hole.start = start + process.limit
+                buffer.compactHoles()
+                self.last_allocated_hole = start_hole
+                return True
+            start_hole = start_hole.next
         return False
 
 
@@ -55,10 +63,8 @@ class BestFit(Policy):
         if best_hole:
             start, end = best_hole.start, best_hole.end
             buffer.map[(start, start + process.limit)] = process.id
-            if end - start > process.limit:
-                best_hole.start = start + process.limit
-            else:
-                buffer.holes = best_hole.next
+            best_hole.start = start + process.limit
+            buffer.compactHoles()
             return True
         return False
 
@@ -77,9 +83,7 @@ class WorstFit(Policy):
         if worst_hole:
             start, end = worst_hole.start, worst_hole.end
             buffer.map[(start, start + process.limit)] = process.id
-            if end - start > process.limit:
-                worst_hole.start = start + process.limit
-            else:
-                buffer.holes = worst_hole.next
+            worst_hole.start = start + process.limit
+            buffer.compactHoles()
             return True
         return False
