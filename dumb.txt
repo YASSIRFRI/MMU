@@ -33,3 +33,6 @@ Description:
 Print the memory map.
 The command should print which memory locations are assigned and to which processes, and
 which memory locations are free
+
+
+(1: First Fit, 2: Next Fit, 3: Best Fit, and 4: Worst Fit)
