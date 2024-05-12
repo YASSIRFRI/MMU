@@ -1,0 +1,18 @@
+python main.py 500 2
+
+cr 100
+pm
+cr 50
+pm
+cr 50
+pm
+dl 2
+pm
+cr 10
+pm
+cr 10
+pm
+cr 90
+pm
+cr 10
+pm
