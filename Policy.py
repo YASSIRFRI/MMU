@@ -60,7 +60,7 @@ class BestFit(Policy):
         for i, hole in enumerate(buffer.holes):
             start, end = hole
             if end - start >= process.limit:
-                if best is None or end-start < best[1]-best[0]:
+                if best is None or end-start < best[2]-best[1]:
                     best = (i, start, end)
         if best is None:
             return False
@@ -78,7 +78,7 @@ class WorstFit(Policy):
         for i, hole in enumerate(buffer.holes):
             start, end = hole
             if end - start >= process.limit:
-                if worst is None or end-start > worst[1]-worst[0]:
+                if worst is None or end-start > worst[2]-worst[1]:
                     worst = (i, start, end)
         if worst is None:
             return False
