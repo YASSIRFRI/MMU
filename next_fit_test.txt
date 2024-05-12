@@ -16,3 +16,18 @@ cr 90
 pm
 cr 10
 pm
+cr 100
+pm
+cr 100
+cr 70
+pm
+cr 20
+pm
+dl 4
+pm
+cr 3
+pm
+cr 20
+pm
+cr 9
+pm
