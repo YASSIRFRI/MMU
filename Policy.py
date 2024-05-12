@@ -1,89 +1,85 @@
 class Policy:
     """Abstract class for management policies"""
-    def allocate(self, start, end):
+    def allocate(self, buffer, process):
         raise NotImplementedError("Subclasses must implement abstract method")
-    
-    
-
-
 
 
 class FirstFit(Policy):
-    def __init__(self):
-        pass
     def allocate(self, buffer, process):
-        for i, hole in enumerate(buffer.holes):
-            start, end = hole
+        current_hole = buffer.holes
+        while current_hole:
+            start, end = current_hole.start, current_hole.end
             if end - start >= process.limit:
-                buffer.map[(start, start+process.limit)] = process.id
-                buffer.holes[i] = (start+process.limit, end)
+                buffer.map[(start, start + process.limit)] = process.id
+                current_hole.start = start + process.limit
+                buffer.compactHoles()
                 return True
+            current_hole = current_hole.next
         return False
-    
+
+
 class NextFit(Policy):
     def __init__(self):
-        self.last_allocated_index = 0
-    
+        self.last_allocated_hole = None
+
     def allocate(self, buffer, process):
-        num_holes = len(buffer.holes)
-        start_index = self.last_allocated_index
-        print(start_index)
-        for i in range(start_index, num_holes):
-            start, end = buffer.holes[i]
+        start_hole = self.last_allocated_hole if self.last_allocated_hole else buffer.holes
+        current_hole = start_hole
+        while current_hole:
+            start, end = current_hole.start, current_hole.end
             if end - start >= process.limit:
                 buffer.map[(start, start + process.limit)] = process.id
-                buffer.holes[i] = (start + process.limit, end)
                 if end - start > process.limit:
-                    self.last_allocated_index = i
-                else :
-                    self.last_allocated_index = (i+1)%num_holes
+                    current_hole.start = start + process.limit
+                else:
+                    current_hole = current_hole.next
+                self.last_allocated_hole = current_hole
                 return True
-        for i in range(num_holes):
-            start, end = buffer.holes[i]
-            if end - start >= process.limit:
-                buffer.map[(start, start + process.limit)] = process.id
-                buffer.holes[i] = (start + process.limit, end)
-                if end - start > process.limit:
-                    self.last_allocated_index = i
-                else :
-                    self.last_allocated_index = (i+1)%num_holes
-                return True
-        
+            current_hole = current_hole.next
+            if current_hole == start_hole:
+                break
         return False
 
 
 class BestFit(Policy):
-    def __init__(self):
-        pass
     def allocate(self, buffer, process):
-        best = None
-        for i, hole in enumerate(buffer.holes):
-            start, end = hole
+        best_hole = None
+        current_hole = buffer.holes
+        while current_hole:
+            start, end = current_hole.start, current_hole.end
             if end - start >= process.limit:
-                if best is None or end-start < best[2]-best[1]:
-                    best = (i, start, end)
-        if best is None:
-            return False
-        i, start, end = best
-        buffer.map[(start, start+process.limit)] = process.id
-        buffer.holes[i] = (start+process.limit, end)
-        return True
-    
+                if best_hole is None or (end - start) < (best_hole.end - best_hole.start):
+                    best_hole = current_hole
+            current_hole = current_hole.next
+
+        if best_hole:
+            start, end = best_hole.start, best_hole.end
+            buffer.map[(start, start + process.limit)] = process.id
+            if end - start > process.limit:
+                best_hole.start = start + process.limit
+            else:
+                buffer.holes = best_hole.next
+            return True
+        return False
+
+
 class WorstFit(Policy):
-    def __init__(self):
-        pass
-    
     def allocate(self, buffer, process):
-        worst = None
-        for i, hole in enumerate(buffer.holes):
-            start, end = hole
+        worst_hole = None
+        current_hole = buffer.holes
+        while current_hole:
+            start, end = current_hole.start, current_hole.end
             if end - start >= process.limit:
-                if worst is None or end-start > worst[2]-worst[1]:
-                    worst = (i, start, end)
-        if worst is None:
-            return False
-        i, start, end = worst
-        buffer.map[(start, start+process.limit)] = process.id
-        if end - start > process.limit:
-            buffer.holes[i] = (start+process.limit, end)
-        return True
+                if worst_hole is None or (end - start) > (worst_hole.end - worst_hole.start):
+                    worst_hole = current_hole
+            current_hole = current_hole.next
+
+        if worst_hole:
+            start, end = worst_hole.start, worst_hole.end
+            buffer.map[(start, start + process.limit)] = process.id
+            if end - start > process.limit:
+                worst_hole.start = start + process.limit
+            else:
+                buffer.holes = worst_hole.next
+            return True
+        return False
