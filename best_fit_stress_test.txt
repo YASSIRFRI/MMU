@@ -1,0 +1,42 @@
+python MMU.py 500 3
+
+cr 500
+pm
+cr 10
+dl 1
+pm
+cr 10
+pm
+cr 20
+pm
+cr 30
+pm
+cr 40
+pm
+cr 50
+pm
+cr 60
+pm
+cr 70
+pm
+cr 80
+pm
+cr 90
+pm
+cr 100
+dl 9
+pm
+dl 7
+pm
+dl 5
+pm
+dl 3
+pm
+cr 50
+pm
+cr 50
+pm
+dl 12
+pm
+cr 60
+pm

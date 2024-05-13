@@ -1,4 +1,4 @@
-python main.py 500 2
+python MMU.py 500 2
 
 cr 100
 pm
