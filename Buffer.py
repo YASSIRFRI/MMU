@@ -1,3 +1,5 @@
+import random
+
 class Buffer:
     class Hole:
         def __init__(self, start, end):
@@ -61,15 +63,22 @@ class Buffer:
         for key, value in self.map.items():
             newkey = (key[0], key[1] - key[0])
             map2[newkey] = value
-        print(map2)
+        print("**** Processes: ****")
+        for e in map2:
+            print(f"Process {map2[e]}: {e}")
+        print("**** Available Memory Slots: ****")
+        current = self.holes
+        while current:
+            print(f"({current.start}, {current.end})")
+            current = current.next
         for e in self.map:
-            procees_name = "@@@@@@Process " + str(self.map[e]) + "@@@@"
+            procees_name = "@@@@@@@@ Process " + str(self.map[e]) + "@@@@"
             for i in range(32 - len(procees_name)):
                 procees_name += "@"
             output_buffer[e[0] * 32:e[0] * 32 + 32] = procees_name
             for i in range(e[0] + 1, e[1]):
                 for j in range(32):
-                    output_buffer[i * 32 + j] = "*"
+                    output_buffer[i * 32 + j] = random.choice(["0", "1"])
         for i in range(self.size):
             memory_file.write("".join(output_buffer[i * 32:(i + 1) * 32]) + "\n")
         memory_file.close()
