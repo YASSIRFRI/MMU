@@ -15,7 +15,7 @@ def display_help():
     """)
 
 if len(sys.argv) != 3:
-    print("Invalid Format (Usage: python main.py TOTAL_MEMORY MANAGEMENT_POLICY)")
+    print("Invalid Format (Usage: python MMU.py TOTAL_MEMORY MANAGEMENT_POLICY)")
     sys.exit(1)
 
 total_memory = int(sys.argv[1])
